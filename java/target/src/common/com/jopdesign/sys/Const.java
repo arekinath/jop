@@ -207,6 +207,12 @@ public class Const {
 	public static final int MSK_UA_TDRE = 1;
 	public static final int MSK_UA_RDRF = 2;
 	
+	// Customised nexys2 LED & SWITCH
+	public static final int NX_BASE = IO_BASE+0x30;
+	public static final int NX_LEDS = NX_BASE;
+	public static final int NX_SWS  = NX_BASE+1;
+	public static final int NX_SSEG = NX_BASE+2;
+	
 	// LED & SWITCH on DE2
 	public static final int LS_BASE = IO_BASE+0x40;
 	// Ethernet interface on DE2
