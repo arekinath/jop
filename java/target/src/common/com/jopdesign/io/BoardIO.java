@@ -18,39 +18,33 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.jopdesign.sys;
+package com.jopdesign.io;
 
-import com.jopdesign.sys.Const;
-import com.jopdesign.sys.JVMHelp;
-import com.jopdesign.sys.Native;
-import com.jopdesign.io.BoardIO;
-
-public class Nexys2 {
-  private BoardIO bio;
+public final class BoardIO extends HardwareObject {
+  private volatile int leds;
+  private volatile int sws;
+  private volatile int sseg;
   
-  private static int BIO_PTR;
-	private static int BIO_MTAB;
-
-  Nexys2() {
-    bio = (BoardIO) makeHWObject(new BoardIO(), Const.NX_BASE, 0);
+  final public boolean led(int i) {
+    return ((leds & (1 << i)) != 0);
   }
   
-  private static Object makeHWObject(Object o, int address, int idx) {
-		int cp = Native.rdIntMem(Const.RAM_CP);
-		return JVMHelp.makeHWObject(o, address, idx, cp);
-	}
-	
-	private static Nexys2 single = new Nexys2();
-	
-	public static Nexys2 getInstance() {
-	  return single;
-	}
-	
-	public BoardIO getBoardIO() {
-	  return bio;
-	}
-	
-	public static BoardIO io() {
-	  return single.getBoardIO();
-	}
+  final public void setLed(int i, boolean on) {
+    if (on)
+      leds = leds | (1 << i);
+    else
+      leds = leds & ~(1 << i);
+  }
+  
+  final public boolean slider(int i) {
+    return ((sws & (1 << i)) != 0);
+  }
+  
+  final public int sevenSeg() {
+    return sseg;
+  }
+  
+  final public void setSevenSeg(int value) {
+    sseg = value;
+  }
 }
