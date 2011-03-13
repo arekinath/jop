@@ -62,6 +62,11 @@ port (
 --	However, the control signals are low active!
 --
 	led        : out   std_logic_vector (7 downto 0); 
+	slider     : in    std_logic_vector (7 downto 0);
+	pushButton : in    std_logic_vector (3 downto 0);
+	ssegAnode  : out   std_logic_vector (3 downto 0);
+	ssegCathode: out   std_logic_vector (7 downto 0);
+	
 	FlashCS    : out   std_logic; 
 	MemAdr     : out   std_logic_vector (23 downto 1); 
 	MemDB      : inout std_logic_vector (15 downto 0); 
@@ -119,6 +124,7 @@ architecture rtl of jop is
 	signal ram_dout			: std_logic_vector(15 downto 0);
 	signal ram_din			: std_logic_vector(15 downto 0);
 	signal ram_dout_en		: std_logic;
+	signal ram_cs           : std_logic;
 
 -- not available at this board:
 	signal ser_ncts			: std_logic;
@@ -126,7 +132,6 @@ architecture rtl of jop is
 begin
 
 	FlashCS <= '1';
-	led(7 downto 1) <= "1111000";	-- just some pattern
 
 	ser_ncts <= '0';
 --
@@ -162,10 +167,19 @@ end process;
 			sc_io_out, sc_io_in,
 			irq_in, irq_out, exc_req);
 
-	io: entity work.scio 
+	io: entity work.nxscio 
 		port map (clk_int, int_res,
 			sc_io_out, sc_io_in,
 			irq_in, irq_out, exc_req,
+
+			leds(6 downto 0) => led(7 downto 1),
+			leds(17 downto 7) => open,
+			sws(7 downto 0) => slider(7 downto 0),
+			sws(11 downto 8) => pushButton(3 downto 0),
+			sws(17 downto 12) => "000000",
+			
+			ssegAnode => ssegAnode,
+			ssegCathode => ssegCathode,
 
 			txd => RsTx,
 			rxd => RsRx,
@@ -178,6 +192,7 @@ end process;
 			b => open
 		);
 
+	RamCS <= ram_cs;
 	scm: entity work.sc_mem_if
 		generic map (
 			ram_ws => ram_cnt-1,
@@ -190,7 +205,7 @@ end process;
 			ram_dout => ram_dout,
 			ram_din => ram_din,
 			ram_dout_en	=> ram_dout_en,
-			ram_ncs => RamCS,
+			ram_ncs => ram_cs,
 			ram_noe => MemOe,
 			ram_nwe => MemWr
 		);
