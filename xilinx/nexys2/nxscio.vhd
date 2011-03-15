@@ -91,6 +91,7 @@ port (
 -- led switch
 	leds : out std_logic_vector(17 downto 0);
 	sws : in std_logic_vector(17 downto 0);
+	btns : in std_logic_vector(3 downto 0);
 	
 	ssegAnode :  out std_logic_vector(3 downto 0);
 	ssegCathode: out std_logic_vector(7 downto 0);
@@ -252,7 +253,8 @@ begin
 			oLEDR => leds,
 			iSW => sws,
 			ssegAnode => ssegAnode,
-			ssegCathode => ssegCathode
+			ssegCathode => ssegCathode,
+			buttons => btns
 	);
 
 end rtl;

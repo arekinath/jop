@@ -175,8 +175,8 @@ end process;
 			leds(6 downto 0) => led(7 downto 1),
 			leds(17 downto 7) => open,
 			sws(7 downto 0) => slider(7 downto 0),
-			sws(11 downto 8) => pushButton(3 downto 0),
-			sws(17 downto 12) => "000000",
+			sws(17 downto 8) => "0000000000",
+			btns => pushButton,
 			
 			ssegAnode => ssegAnode,
 			ssegCathode => ssegCathode,

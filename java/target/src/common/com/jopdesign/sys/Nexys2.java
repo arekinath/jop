@@ -23,16 +23,16 @@ package com.jopdesign.sys;
 import com.jopdesign.sys.Const;
 import com.jopdesign.sys.JVMHelp;
 import com.jopdesign.sys.Native;
-import com.jopdesign.io.BoardIO;
+import com.jopdesign.io.GPIO;
 
 public class Nexys2 {
-  private BoardIO bio;
+  private GPIO bio;
   
   private static int BIO_PTR;
 	private static int BIO_MTAB;
 
   Nexys2() {
-    bio = (BoardIO) makeHWObject(new BoardIO(), Const.NX_BASE, 0);
+    bio = (GPIO) makeHWObject(new GPIO(), Const.GPIO_BASE, 0);
   }
   
   private static Object makeHWObject(Object o, int address, int idx) {
@@ -46,11 +46,11 @@ public class Nexys2 {
 	  return single;
 	}
 	
-	public BoardIO getBoardIO() {
+	public GPIO getGPIO() {
 	  return bio;
 	}
 	
-	public static BoardIO io() {
-	  return single.getBoardIO();
+	public static GPIO io() {
+	  return single.getGPIO();
 	}
 }

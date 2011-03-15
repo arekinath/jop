@@ -208,7 +208,7 @@ public class Const {
 	public static final int MSK_UA_RDRF = 2;
 	
 	// Customised nexys2 LED & SWITCH
-	public static final int NX_BASE = IO_BASE+0x30;
+	public static final int GPIO_BASE = IO_BASE+0x30;
 	
 	// LED & SWITCH on DE2
 	public static final int LS_BASE = IO_BASE+0x40;

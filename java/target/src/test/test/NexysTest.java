@@ -23,11 +23,29 @@ package test;
 import util.Timer;
 import joprt.RtThread;
 import com.jopdesign.sys.Nexys2;
-import com.jopdesign.io.BoardIO;
+import com.jopdesign.io.GPIO;
 
 public class NexysTest {
   public static void main(String[] args) {
     System.out.println("Hello from JOP!");
+    
+    GPIO gpio = Nexys2.io();
+    System.out.print("GPIO with ");
+    System.out.print(gpio.ledCount());
+    System.out.print(" LEDs, ");
+    System.out.print(gpio.switchCount());
+    System.out.print(" switches, ");
+    System.out.print(gpio.buttonCount());
+    System.out.println(" buttons.");
+    if (gpio.hasSevenSeg()) {
+      System.out.print("Seven segment display with ");
+      System.out.print(gpio.sevenSegDigitCount());
+      if (gpio.isSevenSegHex())
+        System.out.print(" hex");
+      System.out.println(" digits.");
+    } else {
+      System.out.println("Seven segment display not present.");
+    }
   
     new RtThread(5, 100000) {
       private int led = 0;
@@ -35,7 +53,7 @@ public class NexysTest {
       
       public void run() {
         for (;;) {
-          BoardIO io = Nexys2.io();
+          GPIO io = Nexys2.io();
         
           io.setLed(led, false);
           
@@ -52,12 +70,18 @@ public class NexysTest {
     
     new RtThread(10, 1000000) {
       private int n = 0;
+      private int step = 1;
       
       public void run() {
         for (;;) {
-          BoardIO io = Nexys2.io();
+          GPIO io = Nexys2.io();
           
-          io.setSevenSeg(++n);
+          if (io.checkAndClearButton(0)) {
+            step *= -1;
+          }
+          
+          n += step;
+          io.setSevenSegValue(n);
           
           System.out.print("Time: ");
           System.out.println(n);
