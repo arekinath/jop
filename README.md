@@ -28,9 +28,13 @@ could also use one of the pre-provided BIT files in the Downloads link above.
     make java_app P3=NexysTest
 
 Now you can download the image `java/target/dist/bin/NexysTest.jop` via serial using
-the `down.exe` app (which you can run via wine, see http://www.jopwiki.com/Linux)
+the `down_posix` app:
 
-And you should see the LEDs scanning back and forth while the 7seg increments
-once per second.
+    gcc -o down_posix ./c_src/down_posix.c
+    ./down_posix -usb -e java/target/dist/bin/NexysTest.jop /dev/ttyS0
+
+After it finishes, you should see the LEDs scanning back and forth while the 7seg
+increments once per second. Also, the current time should print out on the serial
+console.
 
 The code causing this demo to happen is in `java/target/src/test/test/NexysTest.java`
